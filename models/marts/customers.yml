@@ -76,3 +76,8 @@ metrics:
       measure: customers_with_orders
     filter: |
       {{ Dimension('customer__customer_type') }}  = 'new'
+  - name: lifetime_spend_pretax
+    type: simple
+    label:  Lifetime Spend
+    type_params:
+      measure: lifetime_spend_pretax
