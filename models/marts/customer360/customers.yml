@@ -43,6 +43,7 @@ semantic_models:
         type: categorical
       - name: first_ordered_at
         type: time
+        expr: cast(first_ordered_at as DATE)
         type_params:
           time_granularity: day
       - name: last_ordered_at
@@ -81,3 +82,23 @@ metrics:
     label:  Lifetime Spend
     type_params:
       measure: lifetime_spend_pretax
+
+saved_queries:
+  - name: new_customer_orders
+    description: New customer orders by name and time
+    query_params:
+      metrics:
+        - orders
+      group_by:
+        - Dimension('customer__customer_name')
+        - TimeDimension('metric_time', 'day')
+      where:
+        - "{{ Dimension('customer__customer_type') }}  = 'new'"
+    exports:
+      - name: new_customer_orders
+        config:
+          export_as: table
+      - name: new_customer_orders_view
+        config:
+          export_as: view
+          alias: new_customer_orders_export_alias
